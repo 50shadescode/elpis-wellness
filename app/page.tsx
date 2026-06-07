@@ -22,7 +22,7 @@ export default function Home() {
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
-              href="/contact"
+              href="/meet-jullie"
               className="w-full sm:w-auto inline-flex items-center justify-center rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground transition-all hover:bg-opacity-90 shadow-md"
             >
               Book a Consultation
@@ -201,7 +201,7 @@ export default function Home() {
             Whether you're seeking support for yourself, your loved ones, or your team, we are here to walk alongside you.
           </p>
           <Link 
-            href="/contact" 
+            href="/meet-jullie" 
             className="inline-block bg-accent text-white px-8 py-3 rounded-md font-bold hover:bg-opacity-90 transition-all shadow-lg"
           >
             Start Your Journey

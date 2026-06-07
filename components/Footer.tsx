@@ -59,7 +59,7 @@ export default function Footer() {
               <Link href="/services" className="text-slate-600 hover:text-[#F28C38] transition-colors">Our Services</Link>
               <Link href="/self-assessment" className="text-slate-600 hover:text-[#F28C38] transition-colors">Free Wellness Test</Link>
               <Link href="/meet-jullie" className="text-slate-600 hover:text-[#F28C38] transition-colors">Meet the Psychologist</Link>
-              <Link href="/contact" className="text-slate-600 hover:text-[#F28C38] transition-colors">Book a Session</Link>
+              <Link href="/meet-jullie" className="text-slate-600 hover:text-[#F28C38] transition-colors">Book a Session</Link>
             </div>
           </div>
 

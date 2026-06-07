@@ -49,7 +49,7 @@ export default function SelfAssessment() {
     return { 
       label: "Moderately Severe to Severe", 
       advice: "Your well-being is a priority. Please book a clinical consultation immediately for professional support.", 
-      link: "/contact" 
+      link: "/meet-jullie" 
     };
   };
 

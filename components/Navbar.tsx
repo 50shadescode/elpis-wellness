@@ -59,7 +59,7 @@ export default function Navbar() {
 
         {/* Primary CTA Button - Updated to Brand Orange [#F28C38] */}
         <Link 
-          href="/contact" 
+          href="/meet-jullie" 
           className="bg-[#F28C38] text-white px-8 py-3 rounded-xl text-sm font-bold shadow-lg hover:bg-opacity-90 transition-all active:scale-95"
         >
           Book Consultation
