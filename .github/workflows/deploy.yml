@@ -3,7 +3,7 @@ name: cPanel Automated Deployment
 on:
   push:
     branches:
-      - main
+      - main  # Triggers deployment when you push code to your main branch
 
 jobs:
   deploy:
@@ -28,12 +28,16 @@ jobs:
         NEXT_PUBLIC_SANITY_DATASET: "production"
         FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
-    - name: Deploy Production Files via rsync over SSH
-      uses: easingthemes/ssh-deploy@main
+    - name: Sync Production Files via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        REMOTE_HOST: ${{ secrets.SERVER_IP }}
-        REMOTE_USER: "nursing1"  
-        REMOTE_PORT: "2222" # Connects to cPanel's custom port
-        TARGET: "/home3/nursing1/elpiswellness.co.ke/" 
-        EXCLUDE: "/node_modules/, /.git/, /.github/, /src/"
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./  
+        server-dir: /   
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          /src/**
