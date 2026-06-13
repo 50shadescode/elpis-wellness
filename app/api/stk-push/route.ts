@@ -65,7 +65,7 @@ async function initiateNcbaStkPush(params: {
       TelephoneNo: params.phone,
       Amount: String(params.amount),
       PayBillNo: params.paybillNo,
-      AccountNo: params.accountNo,
+      AccountNo: params.accountNo, // THIS INJECTS THE DATE/TIME INTO THE BANK SYSTEM DIRECTLY
       Network: "Safaricom",
       TransactionType: "CustomerPayBillOnline",
     }),
@@ -99,6 +99,7 @@ export async function POST(req: Request) {
     let reference = "";
     let selectedDate = "N/A";
     let selectedTime = "N/A";
+    let customBankReference = "";
 
     if (flowType === "consultation") {
       const { serviceSlug, date, time } = body;
@@ -125,6 +126,11 @@ export async function POST(req: Request) {
       amount = service.amount;
       itemName = service.name;
       reference = `consult-${service.slug}`;
+      
+      // Clean up date/time text for standard bank character limits (e.g. "2026-06-14", "02:00 PM" -> "0614-0200PM")
+      const cleanDate = date.replace(/^\d{4}-/, ""); 
+      const cleanTime = time.replace(/[:\s]/g, ""); 
+      customBankReference = `${cleanDate}-${cleanTime}`;
     } else if (flowType === "program") {
       const { programSlug, paymentOption } = body as {
         programSlug: string;
@@ -147,13 +153,10 @@ export async function POST(req: Request) {
         );
       }
 
-      amount =
-        paymentOption === "installment"
-          ? program.installmentAmount
-          : program.fullAmount;
-
+      amount = paymentOption === "installment" ? program.installmentAmount : program.fullAmount;
       itemName = program.name;
       reference = `program-${program.slug}-${paymentOption}`;
+      customBankReference = program.slug.slice(0, 20);
     } else {
       return NextResponse.json(
         { success: false, error: "Invalid payment flow type." },
@@ -163,7 +166,7 @@ export async function POST(req: Request) {
 
     const env = getEnv();
 
-    if (!env.baseUrl || !env.paybillNo || !env.accountNo) {
+    if (!env.baseUrl || !env.paybillNo) {
       return NextResponse.json(
         { success: false, error: "NCBA configuration is incomplete." },
         { status: 500 }
@@ -175,13 +178,7 @@ export async function POST(req: Request) {
         {
           success: false,
           error: "NCBA credentials are not yet set. Add username and password in .env.local.",
-          paymentDetails: {
-            flowType,
-            itemName,
-            amount,
-            phone: normalizedPhone,
-            reference,
-          },
+          paymentDetails: { flowType, itemName, amount, phone: normalizedPhone, reference },
         },
         { status: 501 }
       );
@@ -189,13 +186,16 @@ export async function POST(req: Request) {
 
     const accessToken = await getNcbaToken(env.baseUrl, env.username, env.password);
 
+    // If we have a custom reference from the booking layout, use it. Otherwise fallback to the global one.
+    const finalAccountNo = customBankReference || env.accountNo || "Booking";
+
     const stkResponse = await initiateNcbaStkPush({
       baseUrl: env.baseUrl,
       accessToken,
       phone: normalizedPhone,
       amount,
       paybillNo: env.paybillNo,
-      accountNo: env.accountNo,
+      accountNo: finalAccountNo,
     });
 
     // =========================================================================
@@ -238,11 +238,11 @@ export async function POST(req: Request) {
                   <td style="padding: 12px; border: 1px solid #cbd5e1; color: #334155;">${normalizedPhone}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b; color: #ef4444;">Requested Date:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #ef4444;">Requested Date:</td>
                   <td style="padding: 12px; border: 1px solid #cbd5e1; color: #ef4444; font-weight: bold;">${selectedDate}</td>
                 </tr>
                 <tr style="background-color: #f8fafc;">
-                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b; color: #ef4444;">Requested Time:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #ef4444;">Requested Time:</td>
                   <td style="padding: 12px; border: 1px solid #cbd5e1; color: #ef4444; font-weight: bold;">${selectedTime}</td>
                 </tr>
                 <tr>
@@ -268,36 +268,24 @@ export async function POST(req: Request) {
         await mailTransporter.sendMail({
           from: `"Elpis Wellness Africa" <${env.emailUser}>`,
           to: env.receiverEmail,
-          subject: `New Booking Attempt: ${itemName} (${selectedDate})`,
+          subject: `📅 SCHEDULE ALERT: ${itemName} [${selectedDate} @ ${selectedTime}]`,
           html: emailHtmlTemplate,
         });
 
         console.log("Notification email dispatched cleanly to Julie's workspace.");
       } catch (mailError) {
         console.error("Nodemailer delivery error caught safely:", mailError);
-        // We log the error but don't crash the request so the customer can still finish paying
       }
     }
 
     return NextResponse.json({
       success: true,
       message: "STK push initiated successfully.",
-      paymentDetails: {
-        flowType,
-        itemName,
-        amount,
-        phone: normalizedPhone,
-        reference,
-      },
+      paymentDetails: { flowType, itemName, amount, phone: normalizedPhone, reference },
       ncba: stkResponse,
     });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Something went wrong.";
-
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : "Something went wrong.";
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
