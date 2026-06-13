@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { PROGRAMS, SERVICES } from "../../lib/payment-config";
+import nodemailer from "nodemailer";
 
 type ProgramPaymentOption = "full" | "installment";
 
@@ -20,6 +21,9 @@ function getEnv() {
     secretKey: process.env.NCBA_SECRET_KEY || "",
     paybillNo: process.env.NCBA_PAYBILL_NO || "",
     accountNo: process.env.NCBA_ACCOUNT_NO || "",
+    emailUser: process.env.EMAIL_USER || "",
+    emailPass: process.env.EMAIL_PASS || "",
+    receiverEmail: process.env.JULIE_RECEIVER_EMAIL || "",
   };
 }
 
@@ -93,6 +97,8 @@ export async function POST(req: Request) {
     let amount = 0;
     let itemName = "";
     let reference = "";
+    let selectedDate = "N/A";
+    let selectedTime = "N/A";
 
     if (flowType === "consultation") {
       const { serviceSlug, date, time } = body;
@@ -103,6 +109,9 @@ export async function POST(req: Request) {
           { status: 400 }
         );
       }
+
+      selectedDate = date;
+      selectedTime = time;
 
       const service = SERVICES.find((item) => item.slug === serviceSlug);
 
@@ -188,6 +197,87 @@ export async function POST(req: Request) {
       paybillNo: env.paybillNo,
       accountNo: env.accountNo,
     });
+
+    // =========================================================================
+    // AUTOMATED GMAIL NOTIFICATION FOR ELPIS WELLNESS AFRICA
+    // =========================================================================
+    if (env.emailUser && env.emailPass && env.receiverEmail) {
+      try {
+        const mailTransporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: env.emailUser,
+            pass: env.emailPass,
+          },
+        });
+
+        const emailHtmlTemplate = `
+          <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; padding: 25px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+            <div style="text-align: center; border-bottom: 2px solid #10b981; padding-bottom: 15px; margin-bottom: 20px;">
+              <h2 style="color: #0f172a; margin: 0; font-size: 22px;">Elpis Wellness Africa</h2>
+              <p style="color: #10b981; font-weight: 600; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">New Booking STK Prompt Initiated</p>
+            </div>
+            
+            <p style="color: #334155; font-size: 15px; line-height: 1.5;">Hello Julie,</p>
+            <p style="color: #334155; font-size: 15px; line-height: 1.5;">A client has initiated an M-Pesa payment flow on the website. An STK PIN push has been dispatched to their phone. Here are the selection details:</p>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px;">
+              <thead>
+                <tr style="background-color: #f8fafc;">
+                  <th style="padding: 12px; text-align: left; border: 1px solid #cbd5e1; color: #475569;">Item Parameter</th>
+                  <th style="padding: 12px; text-align: left; border: 1px solid #cbd5e1; color: #475569;">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b;">Selected Service/Program:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; color: #334155;">${itemName}</td>
+                </tr>
+                <tr style="background-color: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b;">Customer Mobile:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; color: #334155;">${normalizedPhone}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b; color: #ef4444;">Requested Date:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; color: #ef4444; font-weight: bold;">${selectedDate}</td>
+                </tr>
+                <tr style="background-color: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b; color: #ef4444;">Requested Time:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; color: #ef4444; font-weight: bold;">${selectedTime}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b;">Transaction Value:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: bold; color: #0f172a;">KES ${amount}</td>
+                </tr>
+                <tr style="background-color: #f8fafc;">
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b;">System Reference:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-family: monospace; color: #475569;">${reference}</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px; margin-top: 20px; border-radius: 4px;">
+              <p style="margin: 0; font-size: 13px; color: #14532d; font-weight: 500;">Note: This email verifies that the customer triggered checkout. Monitor your NCBA C2B statement or business dashboard to confirm completion when they fill in their PIN.</p>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 25px 0;" />
+            <p style="font-size: 12px; color: #94a3b8; text-align: center; margin: 0;">Automated Notification Engine by Suby Tech</p>
+          </div>
+        `;
+
+        await mailTransporter.sendMail({
+          from: `"Elpis Wellness Africa" <${env.emailUser}>`,
+          to: env.receiverEmail,
+          subject: `New Booking Attempt: ${itemName} (${selectedDate})`,
+          html: emailHtmlTemplate,
+        });
+
+        console.log("Notification email dispatched cleanly to Julie's workspace.");
+      } catch (mailError) {
+        console.error("Nodemailer delivery error caught safely:", mailError);
+        // We log the error but don't crash the request so the customer can still finish paying
+      }
+    }
 
     return NextResponse.json({
       success: true,
