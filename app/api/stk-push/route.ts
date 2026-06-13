@@ -65,7 +65,7 @@ async function initiateNcbaStkPush(params: {
       TelephoneNo: params.phone,
       Amount: String(params.amount),
       PayBillNo: params.paybillNo,
-      AccountNo: params.accountNo, // Strictly alphanumeric now
+      AccountNo: params.accountNo, // FULLY REVERTED TO THE INITIAL STABLE GATEWAY PARAMETER
       Network: "Safaricom",
       TransactionType: "CustomerPayBillOnline",
     }),
@@ -99,7 +99,6 @@ export async function POST(req: Request) {
     let reference = "";
     let selectedDate = "N/A";
     let selectedTime = "N/A";
-    let customBankReference = "";
 
     if (flowType === "consultation") {
       const { serviceSlug, date, time } = body;
@@ -126,13 +125,6 @@ export async function POST(req: Request) {
       amount = service.amount;
       itemName = service.name;
       reference = `consult-${service.slug}`;
-      
-      // SAFARICOM SAFE FORMAT: Remove ALL hyphens, colons, spaces, and am/pm tags 
-      // Example: "2026-06-13" and "02:30 PM" becomes pure alphanumeric "06130230PM"
-      const pureDate = date.replace(/[^a-zA-Z0-9]/g, "").slice(4); // strips year prefix if needed, or keeps month/day
-      const pureTime = time.replace(/[^a-zA-Z0-9]/g, "");
-      
-      customBankReference = `${pureDate}${pureTime}`; 
     } else if (flowType === "program") {
       const { programSlug, paymentOption } = body as {
         programSlug: string;
@@ -155,10 +147,13 @@ export async function POST(req: Request) {
         );
       }
 
-      amount = paymentOption === "installment" ? program.installmentAmount : program.fullAmount;
+      amount =
+        paymentOption === "installment"
+          ? program.installmentAmount
+          : program.fullAmount;
+
       itemName = program.name;
       reference = `program-${program.slug}-${paymentOption}`;
-      customBankReference = program.slug.replace(/[^a-zA-Z0-9]/g, "").slice(0, 12);
     } else {
       return NextResponse.json(
         { success: false, error: "Invalid payment flow type." },
@@ -168,7 +163,7 @@ export async function POST(req: Request) {
 
     const env = getEnv();
 
-    if (!env.baseUrl || !env.paybillNo) {
+    if (!env.baseUrl || !env.paybillNo || !env.accountNo) {
       return NextResponse.json(
         { success: false, error: "NCBA configuration is incomplete." },
         { status: 500 }
@@ -179,8 +174,14 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "NCBA credentials are not yet set.",
-          paymentDetails: { flowType, itemName, amount, phone: normalizedPhone, reference },
+          error: "NCBA credentials are not yet set. Add username and password in .env.local.",
+          paymentDetails: {
+            flowType,
+            itemName,
+            amount,
+            phone: normalizedPhone,
+            reference,
+          },
         },
         { status: 501 }
       );
@@ -188,16 +189,13 @@ export async function POST(req: Request) {
 
     const accessToken = await getNcbaToken(env.baseUrl, env.username, env.password);
 
-    // Final clean check to guarantee Safaricom receives a safe alphanumeric layout
-    const finalAccountNo = customBankReference.replace(/[^a-zA-Z0-9]/g, "") || env.accountNo || "Booking";
-
     const stkResponse = await initiateNcbaStkPush({
       baseUrl: env.baseUrl,
       accessToken,
       phone: normalizedPhone,
       amount,
       paybillNo: env.paybillNo,
-      accountNo: finalAccountNo.trim(),
+      accountNo: env.accountNo, // REVERTED BACK TO ENV MAPPING (650227)
     });
 
     // =========================================================================
@@ -252,8 +250,8 @@ export async function POST(req: Request) {
                   <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: bold; color: #0f172a;">KES ${amount}</td>
                 </tr>
                 <tr style="background-color: #f8fafc;">
-                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b;">Account Ref Sent:</td>
-                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-family: monospace; color: #475569;">${finalAccountNo}</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b;">System Reference:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-family: monospace; color: #475569;">${reference}</td>
                 </tr>
               </tbody>
             </table>
@@ -283,11 +281,22 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       message: "STK push initiated successfully.",
-      paymentDetails: { flowType, itemName, amount, phone: normalizedPhone, reference },
+      paymentDetails: {
+        flowType,
+        itemName,
+        amount,
+        phone: normalizedPhone,
+        reference,
+      },
       ncba: stkResponse,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Something went wrong.";
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    const message =
+      error instanceof Error ? error.message : "Something went wrong.";
+
+    return NextResponse.json(
+      { success: false, error: message },
+      { status: 500 }
+    );
   }
 }
