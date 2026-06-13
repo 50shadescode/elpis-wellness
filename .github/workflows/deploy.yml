@@ -3,7 +3,7 @@ name: cPanel Automated Deployment
 on:
   push:
     branches:
-      - main  # Triggers deployment when you push code to your main branch
+      - main
 
 jobs:
   deploy:
@@ -11,12 +11,12 @@ jobs:
 
     steps:
     - name: Checkout Source Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  
 
     - name: Set up Node.js Environment
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4  
       with:
-        node-version: '20' # Updated from 18 to pass Next.js compliance metrics
+        node-version: '20'
         cache: 'npm'
 
     - name: Install Dependencies & Build Next.js
@@ -26,13 +26,14 @@ jobs:
       env:
         NEXT_PUBLIC_SANITY_PROJECT_ID: "33xgn627"
         NEXT_PUBLIC_SANITY_DATASET: "production"
+        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     - name: Deploy Production Files via rsync over SSH
       uses: easingthemes/ssh-deploy@main
       with:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
         REMOTE_HOST: ${{ secrets.SERVER_IP }}
         REMOTE_USER: "nursing1"  
+        REMOTE_PORT: "2222" # Connects to cPanel's custom port
         TARGET: "/home3/nursing1/elpiswellness.co.ke/" 
         EXCLUDE: "/node_modules/, /.git/, /.github/, /src/"
