@@ -65,7 +65,7 @@ async function initiateNcbaStkPush(params: {
       TelephoneNo: params.phone,
       Amount: String(params.amount),
       PayBillNo: params.paybillNo,
-      AccountNo: params.accountNo, // THIS INJECTS THE DATE/TIME INTO THE BANK SYSTEM DIRECTLY
+      AccountNo: params.accountNo, // Strictly alphanumeric now
       Network: "Safaricom",
       TransactionType: "CustomerPayBillOnline",
     }),
@@ -127,10 +127,12 @@ export async function POST(req: Request) {
       itemName = service.name;
       reference = `consult-${service.slug}`;
       
-      // Clean up date/time text for standard bank character limits (e.g. "2026-06-14", "02:00 PM" -> "0614-0200PM")
-      const cleanDate = date.replace(/^\d{4}-/, ""); 
-      const cleanTime = time.replace(/[:\s]/g, ""); 
-      customBankReference = `${cleanDate}-${cleanTime}`;
+      // SAFARICOM SAFE FORMAT: Remove ALL hyphens, colons, spaces, and am/pm tags 
+      // Example: "2026-06-13" and "02:30 PM" becomes pure alphanumeric "06130230PM"
+      const pureDate = date.replace(/[^a-zA-Z0-9]/g, "").slice(4); // strips year prefix if needed, or keeps month/day
+      const pureTime = time.replace(/[^a-zA-Z0-9]/g, "");
+      
+      customBankReference = `${pureDate}${pureTime}`; 
     } else if (flowType === "program") {
       const { programSlug, paymentOption } = body as {
         programSlug: string;
@@ -156,7 +158,7 @@ export async function POST(req: Request) {
       amount = paymentOption === "installment" ? program.installmentAmount : program.fullAmount;
       itemName = program.name;
       reference = `program-${program.slug}-${paymentOption}`;
-      customBankReference = program.slug.slice(0, 20);
+      customBankReference = program.slug.replace(/[^a-zA-Z0-9]/g, "").slice(0, 12);
     } else {
       return NextResponse.json(
         { success: false, error: "Invalid payment flow type." },
@@ -177,7 +179,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "NCBA credentials are not yet set. Add username and password in .env.local.",
+          error: "NCBA credentials are not yet set.",
           paymentDetails: { flowType, itemName, amount, phone: normalizedPhone, reference },
         },
         { status: 501 }
@@ -186,8 +188,8 @@ export async function POST(req: Request) {
 
     const accessToken = await getNcbaToken(env.baseUrl, env.username, env.password);
 
-    // If we have a custom reference from the booking layout, use it. Otherwise fallback to the global one.
-    const finalAccountNo = customBankReference || env.accountNo || "Booking";
+    // Final clean check to guarantee Safaricom receives a safe alphanumeric layout
+    const finalAccountNo = customBankReference.replace(/[^a-zA-Z0-9]/g, "") || env.accountNo || "Booking";
 
     const stkResponse = await initiateNcbaStkPush({
       baseUrl: env.baseUrl,
@@ -195,7 +197,7 @@ export async function POST(req: Request) {
       phone: normalizedPhone,
       amount,
       paybillNo: env.paybillNo,
-      accountNo: finalAccountNo,
+      accountNo: finalAccountNo.trim(),
     });
 
     // =========================================================================
@@ -250,8 +252,8 @@ export async function POST(req: Request) {
                   <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: bold; color: #0f172a;">KES ${amount}</td>
                 </tr>
                 <tr style="background-color: #f8fafc;">
-                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b;">System Reference:</td>
-                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-family: monospace; color: #475569;">${reference}</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; color: #1e293b;">Account Ref Sent:</td>
+                  <td style="padding: 12px; border: 1px solid #cbd5e1; font-family: monospace; color: #475569;">${finalAccountNo}</td>
                 </tr>
               </tbody>
             </table>
