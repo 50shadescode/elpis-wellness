@@ -15,6 +15,13 @@ export const PROGRAMS = {
 
 export const SERVICES = [
   {
+    slug: "mpesa-test-session",
+    name: "M-Pesa Gateway Test Session",
+    amount: 10,
+    duration: "10 mins",
+    category: "mental-health-services",
+  },
+  {
     slug: "individual-therapy",
     name: "Individual Therapy Session",
     amount: 5000,
