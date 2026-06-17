@@ -60,54 +60,76 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. UPDATED WIDE LAYOUT: Beacon of Hope Section */}
-      <section className="py-24 px-6 bg-[#fcfcfd]">
+      {/* 3. UPDATED LAYOUT: Clinical Excellence Office Space Tour */}
+      <section className="py-24 px-6 bg-[#fcfcfd] border-t border-border">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
-            {/* Top Text Content */}
-            <div className="max-w-3xl">
-              <h2 className="text-sm font-bold text-brand-orange uppercase tracking-[0.3em] mb-4">
+            {/* Left Column: Embedded Cloudinary Office Tour B-Roll (9:16 Original Framing) */}
+            <div className="relative aspect-[9/16] max-h-[580px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white bg-slate-950 mx-auto">
+              <video 
+                src="https://res.cloudinary.com/dmpdabx8b/video/upload/f_auto,q_auto,vc_h264/v1781731487/Video_from_Martin_br3omd.mp4" 
+                controls 
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Right Column: Grounded Professional Greeting Copy */}
+            <div className="space-y-6">
+              <h2 className="text-sm font-bold text-brand-orange uppercase tracking-[0.3em]">
                 Clinical Excellence
               </h2>
-              <h3 className="text-4xl md:text-5xl font-extrabold text-ink leading-tight mb-6">
-                A Beacon of Hope
+              <h3 className="text-3xl md:text-4xl font-extrabold text-ink leading-tight">
+                Welcome to Elpis Wellness Africa
               </h3>
-              <p className="text-lg text-subtext leading-relaxed">
-                In a world that often feels overwhelming, Elpis Wellness Africa stands as a beacon of hope. 
-                We offer comprehensive, compassionate, and evidence-based mental health services 
-                across the lifespan.
+              
+              <div className="space-y-4 text-base md:text-lg text-subtext font-light leading-relaxed">
+                <p>
+                  In a world that often feels overwhelming, our practice stands as a beacon of hope. We believe that true healing begins in an environment designed entirely around your peace, security, and absolute comfort.
+                </p>
+                <p>
+                  Our physical office space is curated to provide a quiet, modern, and confidential sanctuary away from daily stressors, allowing you to focus completely on your personal path to recovery and mental balance.
+                </p>
+                <p>
+                  Whether you join us for an in-person session at our clinic or connect through our flexible secure teletherapy portal from anywhere across the region, you receive identical dedicated, evidence-based psychological care.
+                </p>
+                <p className="font-medium text-ink pt-2">
+                  Take a digital walk through our space on the left, and explore our specialized clinical services below.
+                </p>
+              </div>
+
+              {/* Action Trigger */}
+              <div className="pt-6 border-t border-border">
+                <Link
+                  href="/meet-jullie"
+                  className="inline-flex items-center justify-center rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-md hover:bg-opacity-90 transition-all text-center"
+                >
+                  Explore Consultations
+                </Link>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Mission & Vision Cards anchored below the office space overview */}
+          <div className="grid sm:grid-cols-2 gap-8 mt-16">
+            <div className="elpis-card !p-8 shadow-sm border border-border rounded-2xl bg-white">
+              <h4 className="text-xl font-bold text-ink mb-3">Our Mission</h4>
+              <p className="text-subtext leading-relaxed">
+                To provide accessible care that empowers individuals to achieve lasting wellness.
               </p>
             </div>
-
-            {/* WIDE PHOTO INTEGRATION: aspect-video */}
-            <div className="relative aspect-video rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white group">
-              <Image 
-                src="/hope.jpeg" 
-                alt="Beacon of Hope" 
-                fill 
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-blue/10 to-transparent" />
+            <div className="elpis-card !p-8 shadow-sm border border-border rounded-2xl bg-white">
+              <h4 className="text-xl font-bold text-ink mb-3">Our Vision</h4>
+              <p className="text-subtext leading-relaxed">
+                To create a society where mental wellness is prioritized at every stage of life.
+              </p>
             </div>
-
-            {/* Mission & Vision Cards below the photo */}
-            <div className="grid sm:grid-cols-2 gap-8">
-              <div className="elpis-card !p-8 shadow-sm border border-border rounded-2xl bg-white">
-                <h4 className="text-xl font-bold text-ink mb-3">Our Mission</h4>
-                <p className="text-subtext leading-relaxed">
-                  To provide accessible care that empowers individuals to achieve lasting wellness.
-                </p>
-              </div>
-              <div className="elpis-card !p-8 shadow-sm border border-border rounded-2xl bg-white">
-                <h4 className="text-xl font-bold text-ink mb-3">Our Vision</h4>
-                <p className="text-subtext leading-relaxed">
-                  To create a society where mental wellness is prioritized at every stage of life.
-                </p>
-              </div>
-            </div>
-
           </div>
         </div>
       </section>
