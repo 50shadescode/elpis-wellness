@@ -7,15 +7,37 @@ import Image from "next/image";
 export default function Home() {
   return (
     <main className="min-h-screen bg-muted">
-      {/* 1. Hero Section */}
-      <section className="px-4 py-20 lg:py-32">
-        <div className="mx-auto max-w-4xl text-center">
-          <h1 className="text-5xl font-extrabold tracking-tight text-ink sm:text-6xl lg:text-7xl">
-            A safe space for <span className="text-primary">healing</span>, 
+      {/* 1. NEW DYNAMIC VIDEO HERO SECTION */}
+      <section className="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden bg-slate-950">
+        
+        {/* Background Video Wrapper - Tinted & Loop optimized via Cloudinary */}
+        <div className="absolute inset-0 w-full h-full z-0 opacity-40 mix-blend-lighten">
+          <video 
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover pointer-events-none"
+          >
+            {/* Using Cloudinary to dynamically trim to a crisp 10s loop (so_0,eo_10) and auto-optimize format/quality */}
+            <source 
+              src="https://res.cloudinary.com/dmpdabx8b/video/upload/f_auto,q_auto,so_0,eo_10/v1781731487/Video_from_Martin_br3omd.mp4" 
+              type="video/mp4" 
+            />
+          </video>
+          {/* Calming deep blue/slate vignette overlay to make text highly readable */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/40" />
+        </div>
+
+        {/* Hero Content Overlays */}
+        <div className="relative mx-auto max-w-4xl text-center z-10 py-20 lg:py-32">
+          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
+            A safe space for <span className="text-primary-foreground underline decoration-primary decoration-4">healing</span>, 
             <br />growth, and mental wellness.
           </h1>
           
-          <p className="mx-auto mt-8 max-w-2xl text-lg text-subtext leading-relaxed">
+          <p className="mx-auto mt-8 max-w-2xl text-lg text-slate-200 leading-relaxed drop-shadow-sm">
             Compassionate, accessible, and evidence-based mental health care 
             empowering individuals, families, and organizations.
           </p>
@@ -23,14 +45,14 @@ export default function Home() {
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/meet-jullie"
-              className="w-full sm:w-auto inline-flex items-center justify-center rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground transition-all hover:bg-opacity-90 shadow-md"
+              className="w-full sm:w-auto inline-flex items-center justify-center rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground transition-all hover:bg-opacity-90 shadow-lg"
             >
               Book a Consultation
             </Link>
 
             <Link
               href="/self-assessment"
-              className="w-full sm:w-auto inline-flex items-center justify-center rounded-md border-2 border-primary px-8 py-4 text-base font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
+              className="w-full sm:w-auto inline-flex items-center justify-center rounded-md border-2 border-white px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-white hover:text-slate-900"
             >
               Take a Self-Assessment
             </Link>
@@ -39,8 +61,8 @@ export default function Home() {
       </section>
 
       {/* 2. Trust Indicators Bar */}
-      <section className="px-4 pb-20">
-        <div className="mx-auto max-w-5xl rounded-2xl bg-surface p-8 shadow-sm border border-border flex flex-wrap justify-between items-center gap-8">
+      <section className="px-4 -mt-8 relative z-20">
+        <div className="mx-auto max-w-5xl rounded-2xl bg-surface p-8 shadow-md border border-border flex flex-wrap justify-between items-center gap-8">
            <div className="flex items-center gap-3">
              <span className="text-primary font-bold">✓</span>
              <span className="text-sm font-medium text-ink">Licensed Psychologist</span>
@@ -60,30 +82,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. UPDATED LAYOUT: Clinical Excellence Office Space Tour */}
+      {/* 3. WIDE LAYOUT: Clinical Excellence Welcome Space */}
       <section className="py-24 px-6 bg-[#fcfcfd] border-t border-border">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
-            {/* Left Column: Embedded Cloudinary Office Tour B-Roll (9:16 Original Framing with Cross-Browser MIME Fix) */}
+            {/* Left Column: Full-length Office Tour View Player */}
             <div className="relative aspect-[9/16] max-h-[580px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white bg-slate-950 mx-auto">
               <video 
                 controls 
-                autoPlay
-                muted
-                loop
-                playsInline
                 preload="metadata"
                 className="w-full h-full object-cover"
               >
-                {/* Dynamically Transformed stream explicitly declared to pass strict browser formats */}
                 <source 
                   src="https://res.cloudinary.com/dmpdabx8b/video/upload/f_auto,q_auto/v1781731487/Video_from_Martin_br3omd.mp4" 
-                  type="video/mp4" 
-                />
-                {/* Clean un-transformed backup fallback link */}
-                <source 
-                  src="https://res.cloudinary.com/dmpdabx8b/video/upload/v1781731487/Video_from_Martin_br3omd.mp4" 
                   type="video/mp4" 
                 />
                 Your browser does not support the video tag.
@@ -114,7 +126,6 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Action Trigger */}
               <div className="pt-6 border-t border-border">
                 <Link
                   href="/meet-jullie"
@@ -127,7 +138,7 @@ export default function Home() {
 
           </div>
 
-          {/* Mission & Vision Cards anchored below the office space overview */}
+          {/* Mission & Vision Cards */}
           <div className="grid sm:grid-cols-2 gap-8 mt-16">
             <div className="elpis-card !p-8 shadow-sm border border-border rounded-2xl bg-white">
               <h4 className="text-xl font-bold text-ink mb-3">Our Mission</h4>
