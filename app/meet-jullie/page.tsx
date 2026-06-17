@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SERVICES } from "../lib/payment-config";
 
@@ -67,19 +68,22 @@ export default function MeetJullie() {
   };
 
   return (
-    <main className="py-20 px-6 max-w-7xl mx-auto space-y-16">
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
-        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-border bg-slate-200">
-          <Image
-            src="/photo.jpeg"
-            alt="Jullie A. Otieno - Clinical Psychologist"
-            fill
-            className="object-cover"
-            priority
-          />
+    <main className="py-20 px-6 max-w-7xl mx-auto space-y-24">
+      {/* 1. Profile Bio Section */}
+      <div className="grid lg:grid-cols-12 gap-12 items-center">
+        <div className="lg:col-span-4 flex justify-center">
+          <div className="relative w-full max-w-[340px] aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border border-border bg-slate-200">
+            <Image
+              src="/photo.jpeg"
+              alt="Jullie A. Otieno - Clinical Psychologist"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
         </div>
 
-        <div>
+        <div className="lg:col-span-8">
           <h1 className="text-4xl font-bold text-ink mb-2 text-primary">
             Jullie A. Otieno
           </h1>
@@ -103,7 +107,7 @@ export default function MeetJullie() {
                 Professional Status
               </p>
               <p className="text-ink font-medium leading-relaxed">
-                Duly Licensed and Registered Practitioner with the
+                Duly Licensed and Registered Practitioner with the{" "}
                 <span className="block text-primary font-bold">
                   Counsellors and Psychologists Board (CPB)
                 </span>
@@ -118,7 +122,64 @@ export default function MeetJullie() {
         </div>
       </div>
 
-      <section className="bg-white rounded-3xl shadow-lg border border-slate-200 p-8 md:p-10">
+      {/* 2. Embedded Video Presentation & Verbatim Text Transcript */}
+      <section className="bg-white rounded-3xl shadow-md border border-slate-200 p-8 md:p-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          {/* Left Frame: Cloudinary Explainer Video Container (9:16 Original Framing) */}
+          <div className="relative aspect-[9/16] max-h-[560px] w-full rounded-2xl overflow-hidden shadow-xl border-4 border-slate-50 bg-slate-950 mx-auto">
+            <video 
+              controls 
+              preload="metadata"
+              className="w-full h-full object-cover"
+            >
+              <source 
+                src="https://res.cloudinary.com/dmpdabx8b/video/upload/f_auto,q_auto/v1781733246/Video_from_Martin_ifbgk3.mp4" 
+                type="video/mp4" 
+              />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          {/* Right Frame: Her Exact Verbal Transcription */}
+          <div className="space-y-6">
+            <span className="text-xs font-bold text-primary uppercase tracking-[0.2em]">
+              A Message from Jullie
+            </span>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-ink tracking-tight">
+              Demystifying Your First Therapy Hour
+            </h2>
+            
+            <div className="space-y-4 text-base md:text-lg text-subtext font-light leading-relaxed border-l-2 border-primary/20 pl-4">
+              <p>
+                "I want to tell you what actually happens in a first therapy session, because the version in your head is probably wrong. It’s not a couch and a notepad and someone saying, <span className="italic font-medium text-ink">'and how does that make you feel?'</span> every five minutes.
+              </p>
+              <p>
+                It’s not you crying and confessing everything in the first hour. It’s not someone telling you what is wrong with you.
+              </p>
+              <p className="font-semibold text-ink">
+                Here’s what it actually is: <span className="text-primary">It’s a conversation.</span>
+              </p>
+              <p>
+                I ask you questions. You ask me some questions. We figure out if this is the right space for you. No pressure, no performance.
+              </p>
+              <p>
+                You don’t have to have the right words. You don’t have to know exactly what’s wrong. Most people don’t know exactly what’s wrong—that’s actually why they come.
+              </p>
+              <p className="font-medium text-ink pt-1">
+                The first session is just about showing up. Everything else we figure out together.
+              </p>
+              <p>
+                If you’ve been thinking about it, that thought is worth following. You don’t have to be in crisis to deserve support. You just have to be human."
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 3. Booking Engine Form Section */}
+      <section id="booking" className="bg-white rounded-3xl shadow-lg border border-slate-200 p-8 md:p-10">
         <div className="grid lg:grid-cols-2 gap-10">
           <div>
             <h2 className="text-3xl font-bold text-primary mb-3">
@@ -193,7 +254,7 @@ export default function MeetJullie() {
               <button
                 onClick={handleBookingPayment}
                 disabled={loading}
-                className="w-full rounded-xl bg-brand-orange text-white font-bold py-4 px-6 disabled:opacity-60"
+                className="w-full rounded-xl bg-brand-orange text-white font-bold py-4 px-6 disabled:opacity-60 transition-all active:scale-[0.99]"
               >
                 {loading ? "Processing..." : "Pay to Secure Slot"}
               </button>
