@@ -65,10 +65,9 @@ export default function Home() {
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
-            {/* Left Column: Embedded Cloudinary Office Tour B-Roll (9:16 Original Framing) */}
+            {/* Left Column: Embedded Cloudinary Office Tour B-Roll (9:16 Original Framing with Cross-Browser MIME Fix) */}
             <div className="relative aspect-[9/16] max-h-[580px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white bg-slate-950 mx-auto">
               <video 
-                src="https://res.cloudinary.com/dmpdabx8b/video/upload/f_auto,q_auto,vc_h264/v1781731487/Video_from_Martin_br3omd.mp4" 
                 controls 
                 autoPlay
                 muted
@@ -76,7 +75,19 @@ export default function Home() {
                 playsInline
                 preload="metadata"
                 className="w-full h-full object-cover"
-              />
+              >
+                {/* Dynamically Transformed stream explicitly declared to pass strict browser formats */}
+                <source 
+                  src="https://res.cloudinary.com/dmpdabx8b/video/upload/f_auto,q_auto/v1781731487/Video_from_Martin_br3omd.mp4" 
+                  type="video/mp4" 
+                />
+                {/* Clean un-transformed backup fallback link */}
+                <source 
+                  src="https://res.cloudinary.com/dmpdabx8b/video/upload/v1781731487/Video_from_Martin_br3omd.mp4" 
+                  type="video/mp4" 
+                />
+                Your browser does not support the video tag.
+              </video>
             </div>
 
             {/* Right Column: Grounded Professional Greeting Copy */}
