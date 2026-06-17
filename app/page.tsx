@@ -7,11 +7,11 @@ import Image from "next/image";
 export default function Home() {
   return (
     <main className="min-h-screen bg-muted">
-      {/* 1. NEW DYNAMIC VIDEO HERO SECTION */}
-      <section className="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden bg-slate-950">
+      {/* 1. BRIGHTER DYNAMIC VIDEO HERO SECTION */}
+      <section className="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden bg-slate-900">
         
-        {/* Background Video Wrapper - Tinted & Loop optimized via Cloudinary */}
-        <div className="absolute inset-0 w-full h-full z-0 opacity-40 mix-blend-lighten">
+        {/* Background Video Wrapper - Visibility boosted from 40% to 65% for natural warmth */}
+        <div className="absolute inset-0 w-full h-full z-0 opacity-65">
           <video 
             autoPlay
             muted
@@ -20,24 +20,23 @@ export default function Home() {
             preload="metadata"
             className="w-full h-full object-cover pointer-events-none"
           >
-            {/* Using Cloudinary to dynamically trim to a crisp 10s loop (so_0,eo_10) and auto-optimize format/quality */}
             <source 
               src="https://res.cloudinary.com/dmpdabx8b/video/upload/f_auto,q_auto,so_0,eo_10/v1781731487/Video_from_Martin_br3omd.mp4" 
               type="video/mp4" 
             />
           </video>
-          {/* Calming deep blue/slate vignette overlay to make text highly readable */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/40" />
+          {/* Softened, highly transparent color overlay to maximize room brightness */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-slate-900/15" />
         </div>
 
-        {/* Hero Content Overlays */}
-        <div className="relative mx-auto max-w-4xl text-center z-10 py-20 lg:py-32">
+        {/* Hero Content Overlays with drop-shadow for pristine readability */}
+        <div className="relative mx-auto max-w-4xl text-center z-10 py-20 lg:py-32 drop-shadow-md">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
             A safe space for <span className="text-primary-foreground underline decoration-primary decoration-4">healing</span>, 
             <br />growth, and mental wellness.
           </h1>
           
-          <p className="mx-auto mt-8 max-w-2xl text-lg text-slate-200 leading-relaxed drop-shadow-sm">
+          <p className="mx-auto mt-8 max-w-2xl text-lg text-slate-100 leading-relaxed font-medium">
             Compassionate, accessible, and evidence-based mental health care 
             empowering individuals, families, and organizations.
           </p>
