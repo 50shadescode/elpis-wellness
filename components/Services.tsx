@@ -3,9 +3,9 @@ import Image from "next/image";
 export default function Services() {
   const services = [
     { 
-      title: "Individual Therapy", 
+      title: "Individual's Therapy", 
       desc: "Support for anxiety, depression, and trauma across all life stages.", 
-      image: "https://res.cloudinary.com/dmpdabx8b/image/upload/f_auto,q_auto/v1781812010/Photo_from_Martin_f6lvpi.jpg" 
+      image: "https://res.cloudinary.com/dmpdabx8b/image/upload/f_auto,q_auto/v1781813527/individual_therapy.jpg" 
     },
     { 
       title: "Family & Couples", 
