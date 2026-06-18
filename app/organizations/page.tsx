@@ -21,7 +21,8 @@ export default function Organizations() {
     {
       title: "Crisis Management & Debriefing",
       description: "Timely support for organizations following traumatic incidents or high-stress transitions within the workplace.",
-      image: "https://images.unsplash.com/photo-1573497159142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600",
+      // Replaced the broken URL with a highly reliable corporate support photo
+      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600",
       details: ["Trauma debriefing", "Immediate response", "Strategic planning"]
     }
   ];
@@ -46,7 +47,7 @@ export default function Organizations() {
               key={index} 
               className="bg-white p-3 rounded-2xl border border-border hover:shadow-lg transition-all group flex flex-col"
             >
-              {/* Image Container: Matches the perfect rounded frame profile */}
+              {/* Image Container: Perfect rounded frame profile */}
               <div className="w-full h-64 rounded-xl overflow-hidden bg-slate-100">
                 <img
                   src={service.image}
