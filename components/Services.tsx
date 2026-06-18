@@ -47,21 +47,23 @@ export default function Services() {
           {services.map((s, i) => (
             <div 
               key={i} 
-              className="group hover:border-brand-blue transition-all flex flex-col overflow-hidden bg-white rounded-2xl border border-border shadow-sm"
+              className="group hover:border-brand-blue transition-all flex flex-col bg-white rounded-2xl border border-border shadow-sm p-3"
             >
-              {/* Standard HTML Image Tag with raw src attribute */}
-              <img
-                src={s.image}
-                alt={s.title}
-                className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+              {/* Image Container: Rounded on all sides, removing the sharp bottom edges */}
+              <div className="w-full h-64 rounded-xl overflow-hidden bg-slate-100">
+                <img
+                  src={s.image}
+                  alt={s.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
 
-              {/* Text Content */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-primary mb-2 group-hover:text-brand-blue transition-colors">
+              {/* Minimized Text Content */}
+              <div className="pt-4 px-2 pb-2 flex flex-col flex-grow">
+                <h3 className="text-lg font-bold text-primary mb-1 group-hover:text-brand-blue transition-colors">
                   {s.title}
                 </h3>
-                <p className="text-sm text-subtext leading-relaxed">
+                <p className="text-xs text-subtext leading-relaxed">
                   {s.desc}
                 </p>
               </div>
