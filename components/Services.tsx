@@ -5,7 +5,8 @@ export default function Services() {
     { 
       title: "Individual's Therapy", 
       desc: "Support for anxiety, depression, and trauma across all life stages.", 
-      image: "https://res.cloudinary.com/dmpdabx8b/image/upload/f_auto,q_auto/v1781813527/individual_therapy.jpg" 
+      // Updated directly with your dynamic transformation test URL
+      image: "https://res.cloudinary.com/dmpdabx8b/image/upload/ar_9:16,c_auto/ar_3:4,c_auto/f_auto/q_auto/individual_therapy.jpg" 
     },
     { 
       title: "Family & Couples", 
