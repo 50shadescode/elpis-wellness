@@ -5,13 +5,13 @@ export default function Services() {
     { 
       title: "Individual's Therapy", 
       desc: "Support for anxiety, depression, and trauma across all life stages.", 
-      // Updated directly with your dynamic transformation test URL
-      image: "https://res.cloudinary.com/dmpdabx8b/image/upload/ar_9:16,c_auto/ar_3:4,c_auto/f_auto/q_auto/individual_therapy.jpg" 
+      // Optimized Portrait Delivery URL
+      image: "https://res.cloudinary.com/dmpdabx8b/image/upload/ar_3:4,c_fill,g_auto/f_auto,q_auto/v1/Photo_from_Martin_f6lvpi" 
     },
     { 
       title: "Family & Couples", 
       desc: "Improving communication and conflict resolution within relationships.", 
-      image: "/couples-therapy.jpg" // Ready for the next image you select
+      image: "/couples-therapy.jpg" 
     },
     { 
       title: "Teletherapy", 
@@ -51,8 +51,8 @@ export default function Services() {
               key={i} 
               className="elpis-card group hover:border-brand-blue transition-all flex flex-col p-0 overflow-hidden bg-white rounded-2xl border border-border"
             >
-              {/* Card Image Wrapper with Subtle Scale Hover Animation */}
-              <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100">
+              {/* Card Image Wrapper - Adjusted to portrait aspect ratio */}
+              <div className="relative w-full aspect-[3/4] overflow-hidden bg-slate-100">
                 <Image
                   src={s.image}
                   alt={s.title}
