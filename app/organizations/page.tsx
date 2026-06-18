@@ -3,25 +3,25 @@ export default function Organizations() {
     {
       title: "Employee Assistance Programs (EAPs)",
       description: "Professional counseling and support for employees to manage personal and work-related challenges, improving overall workplace morale.",
-      icon: "🏢",
+      image: "https://images.unsplash.com/photo-1431540015161-0bf868a2d407?auto=format&fit=crop&q=80&w=600",
       details: ["Confidential counseling", "Crisis intervention", "Work-life balance support"]
     },
     {
       title: "Workplace Training & Workshops",
       description: "Educational sessions focused on mental health awareness, burnout prevention, and fostering a supportive work culture.",
-      icon: "🎤",
+      image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=600",
       details: ["Stress management", "Mental health first aid", "Team building"]
     },
     {
       title: "Executive Coaching",
       description: "Leadership-focused mental wellness strategies designed to help executives lead with clarity and resilience.",
-      icon: "👔",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600",
       details: ["Leadership wellness", "Emotional intelligence", "Performance coaching"]
     },
     {
       title: "Crisis Management & Debriefing",
       description: "Timely support for organizations following traumatic incidents or high-stress transitions within the workplace.",
-      icon: "🛡️",
+      image: "https://images.unsplash.com/photo-1573497159142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600",
       details: ["Trauma debriefing", "Immediate response", "Strategic planning"]
     }
   ];
@@ -42,22 +42,35 @@ export default function Organizations() {
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8">
           {corporateServices.map((service, index) => (
-            <div key={index} className="bg-white p-8 rounded-3xl border border-border hover:shadow-lg transition-all group">
-              <div className="text-4xl mb-6 group-hover:scale-110 transition-transform inline-block">
-                {service.icon}
+            <div 
+              key={index} 
+              className="bg-white p-3 rounded-2xl border border-border hover:shadow-lg transition-all group flex flex-col"
+            >
+              {/* Image Container: Matches the perfect rounded frame profile */}
+              <div className="w-full h-64 rounded-xl overflow-hidden bg-slate-100">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
               </div>
-              <h3 className="text-2xl font-bold text-ink mb-4">{service.title}</h3>
-              <p className="text-subtext mb-8 leading-relaxed">
-                {service.description}
-              </p>
-              <ul className="space-y-3">
-                {service.details.map((detail, dIndex) => (
-                  <li key={dIndex} className="flex items-center gap-3 text-sm text-slate-600">
-                    <span className="text-brand-orange font-bold">✓</span>
-                    {detail}
-                  </li>
-                ))}
-              </ul>
+
+              {/* Text Content Area: Minimized to look balanced with the photo */}
+              <div className="pt-4 px-2 pb-2 flex flex-col flex-grow">
+                <h3 className="text-lg font-bold text-ink mb-1">{service.title}</h3>
+                <p className="text-xs text-subtext leading-relaxed mb-4">
+                  {service.description}
+                </p>
+                
+                <ul className="space-y-2 mt-auto">
+                  {service.details.map((detail, dIndex) => (
+                    <li key={dIndex} className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                      <span className="text-brand-orange font-bold">✓</span>
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>
