@@ -13,6 +13,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Elpis Wellness Africa | With Elpis, Find Mental Bliss", 
   description: "Compassionate, accessible, and evidence-based mental health care empowering individuals and organizations.", 
+  /* Injected Google Search Console Verification Token */
+  verification: {
+    google: "dMkP36YM47-j3kulzcBcMel6PMa0cuOxo72LtgxsDA4",
+  },
 };
 
 export default function RootLayout({
