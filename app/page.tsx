@@ -12,12 +12,12 @@ export default function Home() {
         
         {/* Background Video Wrapper - Visibility boosted from 40% to 65% for natural warmth */}
         <div className="absolute inset-0 w-full h-full z-0 opacity-65">
+          {/* Removed preload="metadata" to resolve the mismatched browser preload warning */}
           <video 
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
             className="w-full h-full object-cover pointer-events-none"
           >
             <source 
