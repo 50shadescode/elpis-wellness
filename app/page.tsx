@@ -44,6 +44,7 @@ export default function Home() {
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/meet-jullie"
+              prefetch={false}
               className="w-full sm:w-auto inline-flex items-center justify-center rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground transition-all hover:bg-opacity-90 shadow-lg"
             >
               Book a Consultation
@@ -51,6 +52,7 @@ export default function Home() {
 
             <Link
               href="/self-assessment"
+              prefetch={false}
               className="w-full sm:w-auto inline-flex items-center justify-center rounded-md border-2 border-white px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-white hover:text-slate-900"
             >
               Take a Self-Assessment
@@ -128,6 +130,7 @@ export default function Home() {
               <div className="pt-6 border-t border-border">
                 <Link
                   href="/meet-jullie"
+                  prefetch={false}
                   className="inline-flex items-center justify-center rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-md hover:bg-opacity-90 transition-all text-center"
                 >
                   Explore Consultations
@@ -183,6 +186,7 @@ export default function Home() {
               </p>
               <Link 
                 href="/programs/ignite" 
+                prefetch={false}
                 className="inline-flex items-center gap-2 text-primary font-bold group-hover:gap-4 transition-all"
               >
                 Learn More & Enroll <span>→</span>
@@ -200,6 +204,7 @@ export default function Home() {
               </p>
               <Link 
                 href="/programs/guilt-free" 
+                prefetch={false}
                 className="inline-flex items-center gap-2 text-brand-orange font-bold group-hover:gap-4 transition-all"
               >
                 Join the Journey <span>→</span>
@@ -245,6 +250,7 @@ export default function Home() {
           </p>
           <Link 
             href="/meet-jullie" 
+            prefetch={false}
             className="inline-block bg-accent text-white px-8 py-3 rounded-md font-bold hover:bg-opacity-90 transition-all shadow-lg"
           >
             Start Your Journey
