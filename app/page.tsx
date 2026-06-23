@@ -127,7 +127,8 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="pt-6 border-t border-border">
+              {/* NEW SOCIAL CHANNELS INTEGRATION SPLIT */}
+              <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <Link
                   href="/meet-jullie"
                   prefetch={false}
@@ -135,6 +136,49 @@ export default function Home() {
                 >
                   Explore Consultations
                 </Link>
+
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs uppercase tracking-[0.15em] font-bold text-subtext">Connect & Follow Us</span>
+                  <div className="flex items-center gap-3">
+                    {/* Facebook Link */}
+                    <a 
+                      href="https://www.facebook.com/share/1BacVLhtBb/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="p-2 rounded-xl bg-muted text-[#3D6EA6] hover:bg-[#3D6EA6] hover:text-white transition-all shadow-sm"
+                    >
+                      <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                      </svg>
+                    </a>
+
+                    {/* Instagram Link */}
+                    <a 
+                      href="https://www.instagram.com/elpiswellnessafrica/?utm_source=qr&igsh=MTlramg0dDh6cDByZw==" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="p-2 rounded-xl bg-muted text-[#3D6EA6] hover:bg-[#F28C38] hover:text-white transition-all shadow-sm"
+                    >
+                      <svg className="h-5 w-5 stroke-current fill-none stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                      </svg>
+                    </a>
+
+                    {/* TikTok Link */}
+                    <a 
+                      href="https://tiktok.com/@elpiswellnessafrica" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="p-2 rounded-xl bg-muted text-[#3D6EA6] hover:bg-black hover:text-white transition-all shadow-sm"
+                    >
+                      <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.74-3.94-1.74-.22-.21-.42-.45-.61-.7v5.13c.03 3.44-2.31 6.82-5.73 7.26-2.5.34-5.12-.58-6.68-2.58-1.57-1.97-1.72-4.9-.39-7.05 1.2-1.99 3.51-3.2 5.86-3.12v4.04c-1.4-.08-2.84.73-3.41 2.04-.63 1.41-.16 3.22 1.07 4.14 1.21.94 3.01.88 4.11-.2 1.01-1.04 1.09-2.73 1.09-4.14V.02z"/>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 
