@@ -113,7 +113,7 @@ export default function Footer() {
         <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
           <p>© {currentYear} Elpis Wellness Africa. All rights reserved.</p>
           <div className="flex gap-6 font-medium italic">
-            Built by Suby Tech
+            Built by <a href="https://subytech.com" target="_blank" rel="noopener noreferrer" className="text-[#3D6EA6] hover:text-[#F28C38]">subytech.com</a>
           </div>
         </div>
       </div>
