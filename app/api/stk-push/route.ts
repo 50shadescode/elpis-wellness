@@ -38,12 +38,14 @@ async function getNcbaToken(baseUrl: string, username: string, password: string)
     cache: "no-store",
   });
 
-  const data = await response.json();
-
+  // Safe Check: If gateway returns a non-200 HTML page, intercept it before parsing JSON
   if (!response.ok) {
-    throw new Error(data?.message || "Failed to generate NCBA token.");
+    const errorText = await response.text();
+    // Pass along a simplified, clean summary string to bubble up into the UI
+    throw new Error(`NCBA Auth Server Error (${response.status}): ${errorText.substring(0, 100).replace(/<[^>]*>/g, '').trim() || "Gateway Blocked Request"}`);
   }
 
+  const data = await response.json();
   return data.access_token as string;
 }
 
@@ -72,12 +74,13 @@ async function initiateNcbaStkPush(params: {
     cache: "no-store",
   });
 
-  const data = await response.json();
-
+  // Safe Check: Intercept transaction-level HTML structural gateway failures
   if (!response.ok) {
-    throw new Error(data?.message || "Failed to initiate STK push.");
+    const errorText = await response.text();
+    throw new Error(`NCBA STK Push Error (${response.status}): ${errorText.substring(0, 100).replace(/<[^>]*>/g, '').trim() || "Transaction Dispatch Failed"}`);
   }
 
+  const data = await response.json();
   return data;
 }
 
