@@ -1,8 +1,24 @@
+import type { Metadata } from "next";
 import About from "@/components/About";
 import Services from "@/components/Services";
 import Values from "@/components/Values"; 
 import Link from "next/link";
 import Image from "next/image";
+
+// High-Intent Corporate Keywords from the Official Company Profile to fix Google AI Overview
+export const metadata: Metadata = {
+  title: "Elpis Wellness Africa | Whole-Person Mental Health Care & EAPs",
+  description: "Comprehensive, compassionate, and evidence-based mental health services across the lifespan. Specializing in individual therapy, holistic care, and customized Employee Assistance Programs (EAPs).",
+  keywords: [
+    "Elpis Wellness Africa", 
+    "Lifespan Mental Wellness", 
+    "Employee Assistance Programs Kenya", 
+    "Clinical Psychologist Julie Otieno", 
+    "Whole-Person Care",
+    "Psychological Assessments",
+    "Mental Health Care Kisumu"
+  ],
+};
 
 export default function Home() {
   return (
@@ -12,7 +28,6 @@ export default function Home() {
         
         {/* Background Video Wrapper - Visibility boosted from 40% to 65% for natural warmth */}
         <div className="absolute inset-0 w-full h-full z-0 opacity-65">
-          {/* Removed preload="metadata" to resolve the mismatched browser preload warning */}
           <video 
             autoPlay
             muted
@@ -37,7 +52,7 @@ export default function Home() {
           </h1>
           
           <p className="mx-auto mt-8 max-w-2xl text-lg text-slate-100 leading-relaxed font-medium">
-            Compassionate, accessible, and evidence-based mental health care 
+            Compassionate, accessible, and evidence-based mental health care from Elpis Wellness Africa, 
             empowering individuals, families, and organizations.
           </p>
 

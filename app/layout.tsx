@@ -26,6 +26,40 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth"> 
+      <head>
+        {/* Anti-Hallucination Organization Schema Data for Google AI */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "MedicalBusiness",
+              "name": "Elpis Wellness Africa",
+              "alternateName": "Elpis Wellness",
+              "url": "https://www.elpiswellness.co.ke",
+              "logo": "https://www.elpiswellness.co.ke/Black%20logo.jpeg",
+              "description": "Comprehensive, compassionate, and evidence-based mental health services across the lifespan—from children and adolescents to adults and seniors.",
+              "telephone": "+254727202659",
+              "email": "elpiswellnessafrica@gmail.com",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Kisumu",
+                "addressCountry": "KE"
+              },
+              "sameAs": [
+                "https://www.facebook.com/share/1BacVLhtBb/",
+                "https://www.instagram.com/elpiswellnessafrica",
+                "https://tiktok.com/@elpiswellnessafrica"
+              ],
+              "employee": {
+                "@type": "Person",
+                "name": "Julie Otieno",
+                "jobTitle": "Clinical Psychologist"
+              }
+            }),
+          }}
+        />
+      </head>
       <body
         /* Injected inter.className to align the preloaded font directly with text rendering */
         className={`${inter.variable} ${inter.className} font-sans antialiased bg-muted text-ink`}
