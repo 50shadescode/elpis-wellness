@@ -30,8 +30,9 @@ function getEnv() {
 async function getNcbaToken(baseUrl: string, username: string, password: string) {
   const auth = Buffer.from(`${username}:${password}`).toString("base64");
 
+  // Aligned with Section 1(i) Spec Sheet: Must be a POST request to retrieve the token
   const response = await fetch(`${baseUrl}/payments/api/v1/auth/token`, {
-    method: "GET",
+    method: "POST", 
     headers: {
       Authorization: `Basic ${auth}`,
     },
@@ -41,12 +42,11 @@ async function getNcbaToken(baseUrl: string, username: string, password: string)
   // Safe Check: If gateway returns a non-200 HTML page, intercept it before parsing JSON
   if (!response.ok) {
     const errorText = await response.text();
-    // Pass along a simplified, clean summary string to bubble up into the UI
     throw new Error(`NCBA Auth Server Error (${response.status}): ${errorText.substring(0, 100).replace(/<[^>]*>/g, '').trim() || "Gateway Blocked Request"}`);
   }
 
   const data = await response.json();
-  return data.access_token as string;
+  return data.access_token as string; // Returns the parsed JWT access token string
 }
 
 async function initiateNcbaStkPush(params: {
@@ -57,6 +57,7 @@ async function initiateNcbaStkPush(params: {
   paybillNo: string;
   accountNo: string;
 }) {
+  // Aligned with Section 1(ii) Spec Sheet: POST request to initiate target push sequence
   const response = await fetch(`${params.baseUrl}/payments/api/v1/stk-push/initiate`, {
     method: "POST",
     headers: {
