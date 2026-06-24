@@ -28,25 +28,34 @@ function getEnv() {
 }
 
 async function getNcbaToken(baseUrl: string, username: string, password: string) {
-  const auth = Buffer.from(`${username}:${password}`).toString("base64");
+  // Defensive sanitization: completely strips accidental wrapping quotes or spaces
+  const cleanUsername = username.replace(/['"]+/g, "").trim();
+  const cleanPassword = password.replace(/['"]+/g, "").trim();
 
-  // Aligned with Section 1(i) Spec Sheet: Must be a POST request to retrieve the token
+  const auth = Buffer.from(`${cleanUsername}:${cleanPassword}`).toString("base64");
+
+  // Aligned with Section 1(i) of NCBA TILL STK PUSH & DYNAMIC QR CODE API_2024-2.pdf:
+  // Token generation endpoint for STK pushes strictly expects a GET request.
   const response = await fetch(`${baseUrl}/payments/api/v1/auth/token`, {
-    method: "POST", 
+    method: "GET",
     headers: {
       Authorization: `Basic ${auth}`,
     },
     cache: "no-store",
   });
 
-  // Safe Check: If gateway returns a non-200 HTML page, intercept it before parsing JSON
+  // Safe Check: Intercept HTML gateway crashes before trying to parse JSON
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`NCBA Auth Server Error (${response.status}): ${errorText.substring(0, 100).replace(/<[^>]*>/g, '').trim() || "Gateway Blocked Request"}`);
+    throw new Error(
+      `NCBA Auth Server Error (${response.status}): ${
+        errorText.substring(0, 100).replace(/<[^>]*>/g, "").trim() || "Gateway Blocked Request"
+      }`
+    );
   }
 
   const data = await response.json();
-  return data.access_token as string; // Returns the parsed JWT access token string
+  return data.access_token as string;
 }
 
 async function initiateNcbaStkPush(params: {
@@ -57,7 +66,12 @@ async function initiateNcbaStkPush(params: {
   paybillNo: string;
   accountNo: string;
 }) {
-  // Aligned with Section 1(ii) Spec Sheet: POST request to initiate target push sequence
+  // Defensive cleaning for body parameters to prevent payload formatting drops
+  const cleanPaybill = params.paybillNo.replace(/['"]+/g, "").trim();
+  const cleanAccount = params.accountNo.replace(/['"]+/g, "").trim();
+
+  // Aligned with Section 1(ii) of NCBA TILL STK PUSH & DYNAMIC QR CODE API_2024-2.pdf:
+  // Must be a POST request containing exact PascalCase payload parameters.
   const response = await fetch(`${params.baseUrl}/payments/api/v1/stk-push/initiate`, {
     method: "POST",
     headers: {
@@ -67,18 +81,22 @@ async function initiateNcbaStkPush(params: {
     body: JSON.stringify({
       TelephoneNo: params.phone,
       Amount: String(params.amount),
-      PayBillNo: params.paybillNo,
-      AccountNo: params.accountNo, // Core stable reference account configuration
+      PayBillNo: cleanPaybill,
+      AccountNo: cleanAccount,
       Network: "Safaricom",
       TransactionType: "CustomerPayBillOnline",
     }),
     cache: "no-store",
   });
 
-  // Safe Check: Intercept transaction-level HTML structural gateway failures
+  // Safe Check: Intercept payload-level transactional HTML gateway rejections safely
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`NCBA STK Push Error (${response.status}): ${errorText.substring(0, 100).replace(/<[^>]*>/g, '').trim() || "Transaction Dispatch Failed"}`);
+    throw new Error(
+      `NCBA STK Push Error (${response.status}): ${
+        errorText.substring(0, 100).replace(/<[^>]*>/g, "").trim() || "Transaction Dispatch Failed"
+      }`
+    );
   }
 
   const data = await response.json();
@@ -114,7 +132,6 @@ export async function POST(req: Request) {
         );
       }
 
-      // Aggressive payload structural fallback checks to ensure date/time never parse as empty fallbacks
       selectedDate = date || frontendDate || preferredDate || "Not Selected";
       selectedTime = time || frontendTime || preferredTime || "Not Selected";
 
@@ -201,13 +218,13 @@ export async function POST(req: Request) {
         const mailTransporter = nodemailer.createTransport({
           host: "smtp.gmail.com",
           port: 465,
-          secure: true, // true enforces an immediate encrypted connection to drop network blocks
+          secure: true, 
           auth: {
             user: env.emailUser,
             pass: env.emailPass,
           },
           tls: {
-            rejectUnauthorized: false // Bypasses internal hostname alignment checks on shared servers
+            rejectUnauthorized: false 
           }
         });
 
