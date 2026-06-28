@@ -1,3 +1,6 @@
+"use client";
+import { useState } from "react";
+
 export default function ServicesPage() {
   const allServices = [
     { name: "Individual Therapy", detail: "Focusing on anxiety, depression, and trauma." },
@@ -8,11 +11,11 @@ export default function ServicesPage() {
   ];
 
   return (
-    <main className="py-20 px-6 max-w-7xl mx-auto">
-      <h1 className="text-4xl font-bold text-ink mb-12 text-center">Comprehensive Mental Health Services</h1>
+    <main className="py-20 px-6 max-w-7xl mx-auto bg-gradient-to-r from-[#f0e1ff] to-[#ffffff]">
+      <h1 className="text-4xl font-bold text-center text-primary mb-12">Comprehensive Mental Health Services</h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {allServices.map((service) => (
-          <div key={service.name} className="p-6 bg-white rounded-xl border border-border shadow-sm">
+          <div key={service.name} className="p-8 bg-white rounded-xl border border-border shadow-lg hover:shadow-xl transition-shadow">
             <h3 className="font-bold text-primary mb-2">{service.name}</h3>
             <p className="text-sm text-subtext leading-relaxed">{service.detail}</p>
           </div>

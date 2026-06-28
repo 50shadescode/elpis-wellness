@@ -217,7 +217,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Core Values Section */}
+      {/* 4. About Section */}
+      <About />
+
+      {/* 5. Core Values Section */}
       <Values />
 
       {/* 5. Services Grid */}
@@ -304,8 +307,8 @@ export default function Home() {
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h2 className="text-3xl font-bold mb-6 italic">"With Elpis, Find Mental Bliss"</h2>
           <p className="text-lg opacity-90 leading-relaxed mb-8">
-            At Elpis Wellness Africa, we don't just treat mental health—we nurture the human spirit. 
-            Whether you're seeking support for yourself, your loved ones, or your team, we are here to walk alongside you.
+            At Elpis Wellness Africa, we care for more than mental health—we care for people.
+Our holistic, client-centered approach combines professional expertise with genuine compassion to support emotional well-being, personal growth, and lasting resilience. Whether you're seeking care for yourself, a loved one, or your organization, we're here to help you navigate life's challenges with confidence and hope.
           </p>
           <Link 
             href="/meet-jullie" 
