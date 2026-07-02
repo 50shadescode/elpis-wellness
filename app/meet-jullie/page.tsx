@@ -2,71 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { SERVICES } from "../lib/payment-config";
-
-const TIME_SLOTS = [
-  "09:00 AM",
-  "10:30 AM",
-  "12:00 PM",
-  "02:00 PM",
-  "03:30 PM",
-  "05:00 PM",
-];
 
 export default function MeetJullie() {
-  const [serviceSlug, setServiceSlug] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const selectedService = useMemo(
-    () => SERVICES.find((service) => service.slug === serviceSlug),
-    [serviceSlug]
-  );
-
-  const handleBookingPayment = async () => {
-    setMessage("");
-
-    if (!serviceSlug || !date || !time || !phone) {
-      setMessage("Please select a service, date, time, and enter your phone number.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const response = await fetch("/api/stk-push", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          flowType: "consultation",
-          serviceSlug,
-          date,
-          time,
-          phone,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessage(data.error || "Failed to initiate payment.");
-        return;
-      }
-
-      setMessage("Payment request sent successfully. Please complete the prompt on your phone.");
-    } catch (error) {
-      setMessage("Something went wrong while initiating payment.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <main className="py-20 px-6 max-w-7xl mx-auto space-y-24">
       {/* 1. Profile Bio Section */}
@@ -174,143 +111,24 @@ export default function MeetJullie() {
               </p>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* 3. Booking Engine Form Section */}
-      <section id="booking" className="bg-white rounded-3xl shadow-lg border border-slate-200 p-8 md:p-10">
-        <div className="grid lg:grid-cols-2 gap-10">
-          <div>
-            <h2 className="text-3xl font-bold text-primary mb-3">
-              Book Consultation
-            </h2>
-            <p className="text-subtext mb-8">
-              Choose a service, select your preferred date and time, then pay to secure your slot.
-            </p>
-
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-ink mb-2">
-                  Select Service
-                </label>
-                <select
-                  value={serviceSlug}
-                  onChange={(e) => setServiceSlug(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none"
-                >
-                  <option value="">Choose a service</option>
-                  {SERVICES.map((service) => (
-                    <option key={service.slug} value={service.slug}>
-                      {service.name} - KES {service.amount.toLocaleString()}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-ink mb-2">
-                  Preferred Date
-                </label>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-ink mb-2">
-                  Preferred Time
-                </label>
-                <select
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none"
-                >
-                  <option value="">Choose a time slot</option>
-                  {TIME_SLOTS.map((slot) => (
-                    <option key={slot} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-ink mb-2">
-                  M-Pesa Phone Number
-                </label>
-                <input
-                  type="tel"
-                  placeholder="e.g. 254712345678"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none"
-                />
-              </div>
-
-              <button
-                onClick={handleBookingPayment}
-                disabled={loading}
-                className="w-full rounded-xl bg-brand-orange text-white font-bold py-4 px-6 disabled:opacity-60 transition-all active:scale-[0.99]"
-              >
-                {loading ? "Processing..." : "Pay to Secure Slot"}
-              </button>
-
-              {message ? (
-                <p className="text-sm text-ink bg-slate-100 rounded-xl p-4">
-                  {message}
-                </p>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-2xl font-bold text-primary mb-6">
-              Booking Summary
-            </h3>
-
-            <div className="space-y-4 text-ink">
-              <div>
-                <p className="text-sm text-slate-500">Service</p>
-                <p className="font-semibold">
-                  {selectedService?.name || "Not selected"}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm text-slate-500">Amount</p>
-                <p className="font-semibold">
-                  {selectedService ? `KES ${selectedService.amount.toLocaleString()}` : "—"}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm text-slate-500">Duration</p>
-                <p className="font-semibold">
-                  {selectedService?.duration || "—"}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm text-slate-500">Preferred Date</p>
-                <p className="font-semibold">{date || "Not selected"}</p>
-              </div>
-
-              <div>
-                <p className="text-sm text-slate-500">Preferred Time</p>
-                <p className="font-semibold">{time || "Not selected"}</p>
-              </div>
-
-              <div>
-                <p className="text-sm text-slate-500">Phone Number</p>
-                <p className="font-semibold">{phone || "Not entered"}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* 3. Redesigned Call-To-Action Block Redirecting to Standalone Booking Route */}
+      <section id="booking" className="bg-white rounded-3xl shadow-lg border border-slate-100 max-w-4xl mx-auto p-8 md:p-12 text-center">
+        <h3 className="text-2xl md:text-3xl font-bold text-primary mb-3">
+          Ready to Secure Your Consultation?
+        </h3>
+        <p className="text-slate-600 mb-8 max-w-xl mx-auto leading-relaxed">
+          Schedule your personal consultation, mental wellness appointment, or transformation assessment securely with M-Pesa.
+        </p>
+        <Link 
+          href="/book-consultation" 
+          prefetch={false}
+          className="inline-block bg-[#F28C38] text-white px-10 py-4 rounded-xl text-base font-bold shadow-lg shadow-orange-500/10 hover:bg-opacity-90 transition-all active:scale-95"
+        >
+          Go to Standalone Booking Form Now →
+        </Link>
       </section>
     </main>
   );
