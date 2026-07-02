@@ -57,9 +57,9 @@ export default function Navbar() {
           <Link href="/organizations" prefetch={false} className="hover:text-[#F28C38] transition-colors">For Organizations</Link>
         </div>
 
-        {/* Primary CTA Button - Formally adjusted endpoint targets the standalone page layout */}
+        {/* Primary CTA Button - FIXED: Points exactly to /book-consultation folder path */}
         <Link 
-          href="/book" 
+          href="/book-consultation" 
           prefetch={false}
           className="bg-[#F28C38] text-white px-8 py-3 rounded-xl text-sm font-bold shadow-lg hover:bg-opacity-90 transition-all active:scale-95"
         >
