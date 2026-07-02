@@ -57,8 +57,9 @@ export default function Home() {
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            {/* Redirects straight to the standalone book layout page */}
             <Link
-              href="/meet-jullie"
+              href="/book"
               prefetch={false}
               className="w-full sm:w-auto inline-flex items-center justify-center rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground transition-all hover:bg-opacity-90 shadow-lg"
             >
@@ -144,8 +145,9 @@ export default function Home() {
 
               {/* NEW SOCIAL CHANNELS INTEGRATION SPLIT */}
               <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                {/* Redirects straight to the standalone book layout page */}
                 <Link
-                  href="/meet-jullie"
+                  href="/book"
                   prefetch={false}
                   className="inline-flex items-center justify-center rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-md hover:bg-opacity-90 transition-all text-center"
                 >
@@ -308,10 +310,11 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-6 italic">"With Elpis, Find Mental Bliss"</h2>
           <p className="text-lg opacity-90 leading-relaxed mb-8">
             At Elpis Wellness Africa, we care for more than mental health—we care for people.
-Our holistic, client-centered approach combines professional expertise with genuine compassion to support emotional well-being, personal growth, and lasting resilience. Whether you're seeking care for yourself, a loved one, or your organization, we're here to help you navigate life's challenges with confidence and hope.
+            Our holistic, client-centered approach combines professional expertise with genuine compassion to support emotional well-being, personal growth, and lasting resilience. Whether you're seeking care for yourself, a loved one, or your organization, we're here to help you navigate life's challenges with confidence and hope.
           </p>
+          {/* Redirects straight to the standalone book layout page */}
           <Link 
-            href="/meet-jullie" 
+            href="/book" 
             prefetch={false}
             className="inline-block bg-accent text-white px-8 py-3 rounded-md font-bold hover:bg-opacity-90 transition-all shadow-lg"
           >
