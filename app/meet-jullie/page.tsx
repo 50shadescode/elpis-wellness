@@ -127,7 +127,7 @@ export default function MeetJullie() {
           prefetch={false}
           className="inline-block bg-[#F28C38] text-white px-10 py-4 rounded-xl text-base font-bold shadow-lg shadow-orange-500/10 hover:bg-opacity-90 transition-all active:scale-95"
         >
-          Go to Standalone Booking Form Now →
+          Schedule Your Consultation →
         </Link>
       </section>
     </main>
