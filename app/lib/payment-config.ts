@@ -16,7 +16,7 @@ export const PROGRAMS = {
 export const SERVICES = [
   {
     slug: "individual-therapy",
-    name: "Individual Therapy Session",
+    name: "Physical Individual Therapy Session",
     amount: 5000,
     duration: "1hr 30 mins",
     category: "mental-health-services",
@@ -59,7 +59,7 @@ export const SERVICES = [
   {
     slug: "virtual-individual-clinical-psychologist",
     name: "Virtual Individual Therapy with Clinical Psychologist",
-    amount: 5000,
+    amount: 4000,
     duration: "1hr 30 mins",
     category: "mental-health-services",
   },
